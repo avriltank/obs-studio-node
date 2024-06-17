@@ -79,14 +79,13 @@ jobs:
         run: |
           $TargetArtifact = "${{env.SLBUILDDIRECTORY}}/${{env.PACKAGE_NAME}}-${{ steps.get_version.outputs.VERSION }}-${{matrix.ReleaseName}}-${{env.OS_TAG}}.zip"
           Compress-Archive -Path "${{env.SLFullDistributePath}}\${{env.InstallPath}}" -DestinationPath $TargetArtifact
+          echo "TARGET_ARTIFACT=$TargetArtifact" >> $GITHUB_ENV
         shell: powershell
-        env:
-          TARGET_ARTIFACT: "${{env.SLBUILDDIRECTORY}}/${{env.PACKAGE_NAME}}-${{ steps.get_version.outputs.VERSION }}-${{matrix.ReleaseName}}-${{env.OS_TAG}}.zip"
       - name: Upload Artifact
         uses: actions/upload-artifact@v4.3.3
         with:
           name: ${{env.PACKAGE_NAME}}-${{ steps.get_version.outputs.VERSION }}-${{matrix.ReleaseName}}-${{env.OS_TAG}}
-          path: ${{env.TARGET_ARTIFACT}}
+          path: ${{ env.TARGET_ARTIFACT }}
           if-no-files-found: error
       - name: Create GitHub Release
         if: startsWith(github.ref, 'refs/tags/')
@@ -105,6 +104,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{env.TARGET_ARTIFACT}}
-          asset_name: ${{env.TARGET_ARTIFACT}}
+          asset_path: ${{ env.TARGET_ARTIFACT }}
+          asset_name: ${{ env.TARGET_ARTIFACT }}
           asset_content_type: application/zip
