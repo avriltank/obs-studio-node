@@ -11,6 +11,7 @@ on:
     paths-ignore:
       - '**.md'
     branches: [ "staging" ]
+  workflow_dispatch:
 
 env:
   InstallPath: "obs-studio-node"
