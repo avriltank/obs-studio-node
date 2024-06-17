@@ -79,8 +79,10 @@ jobs:
         run: |
           $TargetArtifact = "${{env.SLBUILDDIRECTORY}}/${{env.PACKAGE_NAME}}-${{ steps.get_version.outputs.VERSION }}-${{matrix.ReleaseName}}-${{env.OS_TAG}}.zip"
           Compress-Archive -Path "${{env.SLFullDistributePath}}\${{env.InstallPath}}" -DestinationPath $TargetArtifact
-          echo $TargetArtifact
+          Write-Host "Artifact prepared at: $TargetArtifact"
         shell: powershell
+        env:
+          TARGET_ARTIFACT: "${{env.SLBUILDDIRECTORY}}/${{env.PACKAGE_NAME}}-${{ steps.get_version.outputs.VERSION }}-${{matrix.ReleaseName}}-${{env.OS_TAG}}.zip"
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
