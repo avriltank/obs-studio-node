@@ -79,7 +79,17 @@ jobs:
         run: |
           $TargetArtifact = "${{env.SLBUILDDIRECTORY}}/${{env.PACKAGE_NAME}}-${{ steps.get_version.outputs.VERSION }}-${{matrix.ReleaseName}}-${{env.OS_TAG}}.zip"
           Compress-Archive -Path "${{env.SLFullDistributePath}}\${{env.InstallPath}}" -DestinationPath $TargetArtifact
+          Write-Host "Artifact prepared at: $TargetArtifact"
+          if (Test-Path $TargetArtifact) {
+            Write-Host "Artifact exists: $TargetArtifact"
+          } else {
+            Write-Host "Artifact does NOT exist: $TargetArtifact"
+          }
           echo "TARGET_ARTIFACT=$TargetArtifact" >> $GITHUB_ENV
+        shell: powershell
+      - name: List files for debugging
+        run: |
+          dir ${{env.SLBUILDDIRECTORY}}
         shell: powershell
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
