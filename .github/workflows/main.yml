@@ -15,14 +15,14 @@ on:
 
 env:
   InstallPath: "obs-studio-node"
-  SLBUILDDIRECTORY: "streamlabs-build.app" # The .app extension is required to run macOS tests correctly.
+  SLBUILDDIRECTORY: "streamlabs-build.app"
   RELEASE_BUCKET: "obsstudionodes3.streamlabs.com"
   RuntimeURL: https://artifacts.electronjs.org/headers/dist
   RuntimeName: iojs
   ElectronVersion: 25.8.4
   SLGenerator: Visual Studio 17 2022
   SLDistributeDirectory: distribute
-  SLFullDistributePath: "streamlabs-build.app/distribute" # The .app extension is required to run macOS tests correctly.
+  SLFullDistributePath: "streamlabs-build.app/distribute"
   LibOBSVersion: 29.1.3sl33
   PACKAGE_NAME: osn
 
@@ -72,6 +72,9 @@ jobs:
             ${{env.SLBUILDDIRECTORY}}
             tests/
           key: ${{ runner.os }}-build-${{ matrix.ReleaseName }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ matrix.ReleaseName }}-
+          fail-on-cache-miss: false
       - name: Create GitHub Release
         if: startsWith(github.ref, 'refs/tags/')
         uses: actions/create-release@v1
